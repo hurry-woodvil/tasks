@@ -1,59 +1,169 @@
 # Tasks
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.0.4.
+Angular Signals を使ったタスク管理アプリ。
 
-## Development server
+このプロジェクトは、Angular の設計・状態管理・テスト・UI コンポーネント設計を学習することを目的として開発している。
 
-To start a local development server, run:
+---
 
-```bash
-ng serve
+## Features
+
+- タスクの追加
+- タスクの編集
+- タスクの削除
+- Undo
+- 完了 / 未完了
+- フィルター
+- 検索
+- ソート
+- ページネーション
+- Loading
+- Error Retry
+- Empty State
+
+---
+
+## Tech Stack
+
+- Angular
+- TypeScript
+- Angular Signals
+- RxJS
+- JSON Server
+- Vitest
+- Playwright
+- ESLint
+- Prettier
+- pnpm
+
+---
+
+## Architecture
+
+### Directory Structure
+
+```text
+src/
+┗━ app/
+    ┗━ features/
+        ┗━ tasks/
+            ┣━ components/
+            ┣━ data-access/
+            ┣━ models/
+            ┣━ pages/
+            ┗━ stores/
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### Data Flow
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+```text
+UI
+↓
+TaskListPage
+↓
+TaskStore (Signals)
+↓
+TaskRepository
+↓
+JSON Server
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Component Design
 
-```bash
-ng generate --help
+```text
+TaskListPage
+┣━ TaskControls
+┣━ TaskForm
+┣━ TaskLoading
+┣━ TaskErrorBanner
+┣━ TaskList
+┃   ┣━ TaskItem
+┃   ┗━ TaskEmptyState
+┣━ TaskPagination
+┗━ TaskUndoBanner
 ```
 
-## Building
+---
 
-To build the project run:
+## State Management
 
-```bash
-ng build
+TaskStore は Signals を利用しています。
+
+```text
+tasks
+┃
+┣━ filteredTasks
+┃   ↓
+┃   pagedTasks
+┃
+┣━ loading
+┣━ error
+┣━ recentlyDeletedTask
+┣━ currentPage
+┗━ pageSize
+
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
 
-## Running unit tests
+## Testing
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+### Unit Test
 
-```bash
-ng test
+- Component
+- Store
+
+### E2E
+
+- CRUD
+- Search
+- Filter
+- Sort
+- Pagination
+- Undo
+- Retry
+
+---
+
+## Development
+
+### Install
+
+```zsh
+pnpm install
 ```
 
-## Running end-to-end tests
+### Start
 
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
+```zsh
+pnpm dev
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+### Test
 
-## Additional Resources
+```zsh
+pnpm test
+```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+### E2E
+
+```zsh
+pnpm e2e
+```
+
+### Check
+
+```zsh
+pnpm check
+```
+
+---
+
+## Future Improvements
+
+- NestJS Backend
+- Repository Interface
+- Authentication
+- Responsive UI
+- Dark Mode
+- Material Design

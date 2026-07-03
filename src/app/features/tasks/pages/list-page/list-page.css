@@ -1,0 +1,14 @@
+.task-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.task-page__header {
+  margin-bottom: 24px;
+}
+
+.task-page__header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
