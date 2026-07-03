@@ -1,0 +1,21 @@
+<nav aria-label="ページネーション">
+  <button
+    type="button"
+    aria-label="前のページ"
+    [disabled]="currentPage() <= 1"
+    (click)="previousPage.emit()"
+  >
+    前へ
+  </button>
+
+  <span>{{ currentPage() }}/{{ totalPages() }}</span>
+
+  <button
+    type="button"
+    aria-label="次のページ"
+    [disabled]="currentPage() >= totalPages()"
+    (click)="nextPage.emit()"
+  >
+    次へ
+  </button>
+</nav>
