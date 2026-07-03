@@ -1,13 +1,13 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 
 import { Task, TaskFilter, TaskSort } from '@tasks/models/task';
-import { TaskRepository } from '@tasks/data-access/task-repository';
+import { TASK_REPOSITORY, TaskRepository } from '@tasks/data-access/task-repository';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TaskStore {
-  private readonly taskRepository = inject(TaskRepository);
+  private readonly taskRepository = inject<TaskRepository>(TASK_REPOSITORY);
 
   readonly tasks = signal<Task[]>([]);
   readonly filter = signal<TaskFilter>('all');
