@@ -3,7 +3,8 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { Task } from '@tasks/models/task';
-import { TaskRepository } from '@tasks/data-access/task-repository';
+import { TASK_REPOSITORY, TaskRepository } from '@tasks/data-access/task-repository';
+import { JsonServerTaskRepository } from '@tasks/data-access/json-server-task-repository';
 
 describe('TaskRepository', () => {
   let repository: TaskRepository;
@@ -13,10 +14,14 @@ describe('TaskRepository', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting(), TaskRepository],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: TASK_REPOSITORY, useClass: JsonServerTaskRepository },
+      ],
     });
 
-    repository = TestBed.inject(TaskRepository);
+    repository = TestBed.inject(TASK_REPOSITORY);
     httpTesting = TestBed.inject(HttpTestingController);
   });
 

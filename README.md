@@ -1,8 +1,27 @@
 # Tasks
 
+**Current Version: v0.2.0**
+
 Angular Signals を使ったタスク管理アプリ。
 
 このプロジェクトは、Angular の設計・状態管理・テスト・UI コンポーネント設計を学習することを目的として開発している。
+
+---
+
+## Learning Goals
+
+このプロジェクトは Todo アプリを作ることが目的ではなく、
+
+Angular における
+
+- Component 設計
+- Signals
+- State Management
+- Repository Pattern
+- Dependency Injection
+- Testing
+
+を学習・検証することを目的としている。
 
 ---
 
@@ -30,6 +49,8 @@ Angular Signals を使ったタスク管理アプリ。
 - Angular Signals
 - RxJS
 - JSON Server
+- Repository Pattern
+- Dependency Injection
 - Vitest
 - Playwright
 - ESLint
@@ -49,6 +70,11 @@ src/
         ┗━ tasks/
             ┣━ components/
             ┣━ data-access/
+            ┃   ┣━ task-repository.ts
+            ┃   ┣━ task-repository.provider.ts
+            ┃   ┣━ json-server-task-repository.ts
+            ┃   ┣━ mock-task-repository.ts
+            ┃   ┗━ local-storage-task-repository.ts
             ┣━ models/
             ┣━ pages/
             ┗━ stores/
@@ -63,9 +89,12 @@ TaskListPage
 ↓
 TaskStore (Signals)
 ↓
-TaskRepository
+TaskRepository (interface)
 ↓
-JSON Server
+Provider
+  ┣━ JsonServerTaskRepository
+  ┣━ MockTaskRepository
+  ┗━ LocalStorageTaskRepository
 ```
 
 ### Component Design
@@ -92,7 +121,9 @@ TaskStore は Signals を利用しています。
 ```text
 tasks
 ┃
-┣━ filteredTasks
+┣━ tasks
+┃   ↓
+┃   filteredTasks
 ┃   ↓
 ┃   pagedTasks
 ┃
@@ -103,6 +134,19 @@ tasks
 ┗━ pageSize
 
 ```
+
+---
+
+## Design Decisions
+
+このプロジェクトでは以下の設計方針を採用している。
+
+- Feature First によるディレクトリ構成
+- Signals を利用した状態管理
+- Store に画面ロジックを集約
+- Repository Pattern によるデータアクセスの抽象化
+- Dependency Injection による Repository の切り替え
+- Barrel Export による公開 API の整理
 
 ---
 
@@ -162,8 +206,9 @@ pnpm check
 ## Future Improvements
 
 - NestJS Backend
-- Repository Interface
+- OpenAPI
 - Authentication
+- Authorization
+- Angular Material
 - Responsive UI
 - Dark Mode
-- Material Design

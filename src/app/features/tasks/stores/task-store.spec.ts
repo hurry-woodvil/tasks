@@ -3,7 +3,7 @@ import { of, throwError } from 'rxjs';
 
 import { Task } from '@tasks/models/task';
 import { TaskStore } from '@tasks/stores/task-store';
-import { TaskRepository } from '@tasks/data-access/task-repository';
+import { TASK_REPOSITORY } from '@tasks/data-access/task-repository';
 
 function createTask(override: Partial<Task> = {}): Task {
   return {
@@ -44,7 +44,7 @@ describe('TaskStore', () => {
       providers: [
         TaskStore,
         {
-          provide: TaskRepository,
+          provide: TASK_REPOSITORY,
           useValue: repositoryMock,
         },
       ],
