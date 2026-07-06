@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { TasksController } from './tasks.controller';
 import { TasksService } from './tasks.service';
 import { InMemoryTaskRepository } from './in-memory-task.repository';
-import { TaskRepository } from './task.repository';
+import { TaskRepository } from './tasks.repository';
 
 @Module({
   controllers: [TasksController],

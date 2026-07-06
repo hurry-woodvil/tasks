@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { Task } from './models/task';
-import { TaskRepository } from './task.repository';
+import { TaskRepository } from './tasks.repository';
 
 @Injectable()
 export class InMemoryTaskRepository implements TaskRepository {
@@ -9,6 +9,10 @@ export class InMemoryTaskRepository implements TaskRepository {
 
   findAll(): Task[] {
     return [...this.tasks];
+  }
+
+  findById(id: string): Task | undefined {
+    return this.tasks.find((task) => task.id === id);
   }
 
   create(task: Task): Task {
@@ -27,5 +31,9 @@ export class InMemoryTaskRepository implements TaskRepository {
 
   delete(id: string): void {
     this.tasks = this.tasks.filter((task) => task.id !== id);
+  }
+
+  deleteAll(): void {
+    this.tasks = [];
   }
 }

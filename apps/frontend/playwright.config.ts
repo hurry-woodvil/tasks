@@ -27,12 +27,12 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   webServer: [
     {
-      command: 'pnpm start',
+      command: 'pnpm --filter frontend dev',
       url: 'http://localhost:4200',
       reuseExistingServer: !process.env['CI'],
     },
     {
-      command: 'pnpm api',
+      command: 'pnpm --filter backend start:dev',
       url: 'http://localhost:3000/tasks',
       reuseExistingServer: !process.env['CI'],
     },

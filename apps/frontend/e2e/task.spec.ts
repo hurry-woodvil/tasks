@@ -13,26 +13,15 @@ async function addTask(page: Page, title: string, dueDate?: string): Promise<voi
 const apiUrl = 'http://localhost:3000/tasks';
 
 test.beforeEach(async ({ page, request }) => {
-  const response = await request.get(apiUrl);
-  const tasks = await response.json();
-
-  for (const task of tasks) {
-    await request.delete(`${apiUrl}/${task.id}`);
-  }
+  const response = await request.delete(apiUrl);
+  expect(response.ok()).toBe(true);
 
   await page.goto('/tasks');
 });
 
 test.afterAll(async ({ request }) => {
-  const response = await request.get(apiUrl);
+  const response = await request.delete(apiUrl);
   expect(response.ok()).toBe(true);
-
-  const tasks = await response.json();
-
-  for (const task of tasks) {
-    await request.delete(`${apiUrl}/${task.id}`);
-    expect(response.ok()).toBe(true);
-  }
 });
 
 test.describe('task CRUD', () => {

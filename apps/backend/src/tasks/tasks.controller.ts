@@ -10,6 +10,8 @@ import {
 
 import type { Task } from './models/task';
 import { TasksService } from './tasks.service';
+import { CreateTaskDto } from './dto/create-task.dto';
+import { UpdateTaskDto } from './dto/update-task.dto';
 
 @Controller('tasks')
 export class TasksController {
@@ -17,25 +19,26 @@ export class TasksController {
 
   @Get()
   findAll(): Task[] {
-    console.log('Find All');
     return this.taskService.findAll();
   }
 
   @Post()
-  create(@Body() task: Task): Task {
-    console.log('Create');
-    return this.taskService.create(task);
+  create(@Body() dto: CreateTaskDto): Task {
+    return this.taskService.create(dto);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() task: Task): Task {
-    console.log('Update');
-    return this.taskService.update({ ...task, id });
+  update(@Param('id') id: string, @Body() dto: UpdateTaskDto): Task {
+    return this.taskService.update(id, dto);
+  }
+
+  @Delete()
+  deleteAll(): void {
+    return this.taskService.deleteAll();
   }
 
   @Delete(':id')
   delete(@Param('id') id: string): void {
-    console.log('Delete');
     return this.taskService.delete(id);
   }
 }
