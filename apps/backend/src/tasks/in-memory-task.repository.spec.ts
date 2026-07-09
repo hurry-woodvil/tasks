@@ -7,8 +7,8 @@ function createTask(overrides: Partial<Task> = {}): Task {
     title: 'Angularを学ぶ',
     status: 'todo',
     dueDate: null,
-    createdAt: '2026-07-01T00:00:00.000Z',
-    updatedAt: '2026-07-01T00:00:00.000Z',
+    createdAt: new Date('2026-07-01T00:00:00.000Z'),
+    updatedAt: new Date('2026-07-01T00:00:00.000Z'),
     ...overrides,
   };
 }
@@ -20,30 +20,30 @@ describe('InMemoryTaskRepository', () => {
     repositoy = new InMemoryTaskRepository();
   });
 
-  it('returns empty tasks by default', () => {
-    expect(repositoy.findAll()).toEqual([]);
+  it('returns empty tasks by default', async () => {
+    await expect(repositoy.findAll()).resolves.toEqual([]);
   });
 
-  it('creates a task', () => {
+  it('creates a task', async () => {
     const task = createTask();
 
-    expect(repositoy.create(task)).toEqual(task);
-    expect(repositoy.findAll()).toEqual([task]);
+    await expect(repositoy.create(task)).resolves.toEqual(task);
+    await expect(repositoy.findAll()).resolves.toEqual([task]);
   });
 
-  it('finds a task by id', () => {
+  it('finds a task by id', async () => {
     const task = createTask();
 
-    repositoy.create(task);
+    await repositoy.create(task);
 
-    expect(repositoy.findById('1')).toEqual(task);
+    await expect(repositoy.findById('1')).resolves.toEqual(task);
   });
 
-  it('returns undefined when task is not found', () => {
-    expect(repositoy.findById('missing-id')).toBeUndefined();
+  it('returns undefined when task is not found', async () => {
+    await expect(repositoy.findById('missing-id')).resolves.toBeUndefined();
   });
 
-  it('updates a task', () => {
+  it('updates a task', async () => {
     const task = createTask();
     const updatedTask = createTask({
       title: 'Angular Signalsを学ぶ',
@@ -51,27 +51,27 @@ describe('InMemoryTaskRepository', () => {
       dueDate: '2026-07-10',
     });
 
-    repositoy.create(task);
+    await repositoy.create(task);
 
-    expect(repositoy.update(updatedTask)).toEqual(updatedTask);
-    expect(repositoy.findById('1')).toEqual(updatedTask);
+    await expect(repositoy.update(updatedTask)).resolves.toEqual(updatedTask);
+    await expect(repositoy.findById('1')).resolves.toEqual(updatedTask);
   });
 
-  it('deletes a task', () => {
+  it('deletes a task', async () => {
     const task = createTask();
 
-    repositoy.create(task);
-    repositoy.delete('1');
+    await repositoy.create(task);
+    await repositoy.delete('1');
 
-    expect(repositoy.findAll()).toEqual([]);
+    await expect(repositoy.findAll()).resolves.toEqual([]);
   });
 
-  it('deletes all tasks', () => {
-    repositoy.create(createTask({ id: '1' }));
-    repositoy.create(createTask({ id: '2', title: 'Reactを学ぶ' }));
+  it('deletes all tasks', async () => {
+    await repositoy.create(createTask({ id: '1' }));
+    await repositoy.create(createTask({ id: '2', title: 'Reactを学ぶ' }));
 
-    repositoy.deleteAll();
+    await repositoy.deleteAll();
 
-    expect(repositoy.findAll()).toEqual([]);
+    await expect(repositoy.findAll()).resolves.toEqual([]);
   });
 });

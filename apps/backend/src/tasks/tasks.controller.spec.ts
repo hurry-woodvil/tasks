@@ -12,8 +12,8 @@ function createTask(overrides: Partial<Task> = {}): Task {
     title: 'Angularを学ぶ',
     status: 'todo',
     dueDate: null,
-    createdAt: '2026-07-01T00:00:00.000Z',
-    updatedAt: '2026-07-01T00:00:00.000Z',
+    createdAt: new Date('2026-07-01T00:00:00.000Z'),
+    updatedAt: new Date('2026-07-01T00:00:00.000Z'),
     ...overrides,
   };
 }
@@ -43,16 +43,16 @@ describe('TasksController', () => {
     controller = module.get(TasksController);
   });
 
-  it('finds all tasks', () => {
+  it('finds all tasks', async () => {
     const tasks = [createTask()];
 
-    service.findAll.mockReturnValue(tasks);
+    service.findAll.mockResolvedValue(tasks);
 
-    expect(controller.findAll()).toEqual(tasks);
+    await expect(controller.findAll()).resolves.toEqual(tasks);
     expect(service.findAll).toHaveBeenCalled();
   });
 
-  it('creates a task', () => {
+  it('creates a task', async () => {
     const dto: CreateTaskDto = {
       title: 'Angularを学ぶ',
       dueDate: null,
@@ -60,13 +60,13 @@ describe('TasksController', () => {
 
     const task = createTask();
 
-    service.create.mockReturnValue(task);
+    service.create.mockResolvedValue(task);
 
-    expect(controller.create(dto)).toEqual(task);
+    await expect(controller.create(dto)).resolves.toEqual(task);
     expect(service.create).toHaveBeenCalledWith(dto);
   });
 
-  it('updates a task', () => {
+  it('updates a task', async () => {
     const dto: UpdateTaskDto = {
       title: 'Angular Signalsを学ぶ',
       status: 'done',
@@ -79,20 +79,20 @@ describe('TasksController', () => {
       dueDate: dto.dueDate,
     });
 
-    service.update.mockReturnValue(task);
+    service.update.mockResolvedValue(task);
 
-    expect(controller.update('1', dto)).toEqual(task);
+    await expect(controller.update('1', dto)).resolves.toEqual(task);
     expect(service.update).toHaveBeenCalledWith('1', dto);
   });
 
-  it('deletes a task', () => {
-    controller.delete('1');
+  it('deletes a task', async () => {
+    await controller.delete('1');
 
     expect(service.delete).toHaveBeenCalledWith('1');
   });
 
-  it('deletes all tasks', () => {
-    controller.deleteAll();
+  it('deletes all tasks', async () => {
+    await controller.deleteAll();
 
     expect(service.deleteAll).toHaveBeenCalled();
   });

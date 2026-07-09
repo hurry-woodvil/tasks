@@ -11,8 +11,8 @@ function createTask(overrides: Partial<Task> = {}): Task {
     title: 'Angularを学ぶ',
     status: 'todo',
     dueDate: null,
-    createdAt: '2026-07-01T00:00:00.000Z',
-    updatedAt: '2026-07-01T00:00:00.000Z',
+    createdAt: new Date('2026-07-01T00:00:00.000Z'),
+    updatedAt: new Date('2026-07-01T00:00:00.000Z'),
     ...overrides,
   };
 }
@@ -51,16 +51,16 @@ describe('TaskService', () => {
     service = module.get(TasksService);
   });
 
-  it('finds all tasks', () => {
+  it('finds all tasks', async () => {
     const tasks = [createTask()];
     repositoy.findAll.mockReturnValue(tasks);
 
-    expect(service.findAll()).toEqual(tasks);
+    await expect(service.findAll()).resolves.toEqual(tasks);
     expect(repositoy.findAll).toHaveBeenCalled();
   });
 
-  it('creates a task', () => {
-    const result = service.create({
+  it('creates a task', async () => {
+    const result = await service.create({
       title: 'Angularを学ぶ',
       dueDate: '2026-07-10',
     });
@@ -71,18 +71,18 @@ describe('TaskService', () => {
     expect(result.status).toBe('todo');
     expect(result.dueDate).toBe('2026-07-10');
     expect(result.id).toEqual(expect.any(String));
-    expect(result.createdAt).toEqual(expect.any(String));
-    expect(result.updatedAt).toEqual(expect.any(String));
+    expect(result.createdAt).toEqual(expect.any(Date));
+    expect(result.updatedAt).toEqual(expect.any(Date));
   });
 
-  it('updates a task', () => {
+  it('updates a task', async () => {
     const task = createTask({
-      createdAt: '2026-07-01T00:00:00.000Z',
+      createdAt: new Date('2026-07-01T00:00:00.000Z'),
     });
 
     repositoy.findById.mockReturnValue(task);
 
-    const result = service.update('1', {
+    const result = await service.update('1', {
       title: 'Angular Signalsを学ぶ',
       status: 'done',
       dueDate: '2026-07-10',
@@ -96,31 +96,31 @@ describe('TaskService', () => {
     expect(result.status).toBe('done');
     expect(result.dueDate).toBe('2026-07-10');
     expect(result.createdAt).toBe(task.createdAt);
-    expect(result.updatedAt).toEqual(expect.any(String));
+    expect(result.updatedAt).toEqual(expect.any(Date));
   });
 
-  it('throws NotFoundException when updating missing task', () => {
+  it('throws NotFoundException when updating missing task', async () => {
     repositoy.findById.mockReturnValue(undefined);
 
-    expect(() =>
+    await expect(() =>
       service.update('missing-id', {
         title: '存在しないタスク',
         status: 'todo',
         dueDate: null,
       }),
-    ).toThrow(NotFoundException);
+    ).rejects.toThrow(NotFoundException);
 
     expect(repositoy.update).not.toHaveBeenCalled();
   });
 
-  it('deletes a task', () => {
-    service.delete('1');
+  it('deletes a task', async () => {
+    await service.delete('1');
 
     expect(repositoy.delete).toHaveBeenCalledWith('1');
   });
 
-  it('deletes all tasks', () => {
-    service.deleteAll();
+  it('deletes all tasks', async () => {
+    await service.deleteAll();
 
     expect(repositoy.deleteAll).toHaveBeenCalled();
   });
