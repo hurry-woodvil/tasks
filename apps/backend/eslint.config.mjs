@@ -11,7 +11,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default tseslint.config(
   {
-    ignores: ['eslint.config.mjs'],
+    ignores: ['eslint.config.mjs', '**/generated/prisma/**'],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
