@@ -1,15 +1,15 @@
 import { Task } from './models/task';
 
 export abstract class TaskRepository {
-  abstract findAll(): Task[];
+  abstract findAll(): Promise<Task[]>;
 
-  abstract findById(id: string): Task | undefined;
+  abstract findById(id: string): Promise<Task | undefined>;
 
-  abstract create(task: Task): Task;
+  abstract create(task: Task): Promise<Task>;
 
-  abstract update(task: Task): Task;
+  abstract update(task: Task): Promise<Task>;
 
-  abstract delete(id: string): void;
+  abstract delete(id: string): Promise<void>;
 
-  abstract deleteAll(): void;
+  abstract deleteAll(): Promise<void>;
 }

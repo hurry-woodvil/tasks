@@ -18,27 +18,30 @@ export class TasksController {
   constructor(private readonly taskService: TasksService) {}
 
   @Get()
-  findAll(): Task[] {
-    return this.taskService.findAll();
+  async findAll(): Promise<Task[]> {
+    return await this.taskService.findAll();
   }
 
   @Post()
-  create(@Body() dto: CreateTaskDto): Task {
-    return this.taskService.create(dto);
+  async create(@Body() dto: CreateTaskDto): Promise<Task> {
+    return await this.taskService.create(dto);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: UpdateTaskDto): Task {
-    return this.taskService.update(id, dto);
+  async update(
+    @Param('id') id: string,
+    @Body() dto: UpdateTaskDto,
+  ): Promise<Task> {
+    return await this.taskService.update(id, dto);
   }
 
   @Delete()
-  deleteAll(): void {
-    return this.taskService.deleteAll();
+  async deleteAll(): Promise<void> {
+    return await this.taskService.deleteAll();
   }
 
   @Delete(':id')
-  delete(@Param('id') id: string): void {
+  async delete(@Param('id') id: string): Promise<void> {
     return this.taskService.delete(id);
   }
 }

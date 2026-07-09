@@ -9,12 +9,12 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 export class TasksService {
   constructor(private readonly taskRepository: TaskRepository) {}
 
-  findAll(): Task[] {
+  async findAll(): Promise<Task[]> {
     return this.taskRepository.findAll();
   }
 
-  create(dto: CreateTaskDto): Task {
-    const now = new Date().toISOString();
+  async create(dto: CreateTaskDto): Promise<Task> {
+    const now = new Date();
 
     const task: Task = {
       id: crypto.randomUUID(),
@@ -28,27 +28,27 @@ export class TasksService {
     return this.taskRepository.create(task);
   }
 
-  update(id: string, dto: UpdateTaskDto): Task {
-    const task = this.taskRepository.findById(id);
+  async update(id: string, dto: UpdateTaskDto): Promise<Task> {
+    const task = await this.taskRepository.findById(id);
 
     if (!task) {
       throw new NotFoundException(`Task not found: ${id}`);
     }
 
-    return this.taskRepository.update({
+    return await this.taskRepository.update({
       ...task,
       title: dto.title,
       status: dto.status,
       dueDate: dto.dueDate,
-      updatedAt: new Date().toISOString(),
+      updatedAt: new Date(),
     });
   }
 
-  delete(id: string): void {
-    this.taskRepository.delete(id);
+  async delete(id: string): Promise<void> {
+    await this.taskRepository.delete(id);
   }
 
-  deleteAll(): void {
-    this.taskRepository.deleteAll();
+  async deleteAll(): Promise<void> {
+    await this.taskRepository.deleteAll();
   }
 }

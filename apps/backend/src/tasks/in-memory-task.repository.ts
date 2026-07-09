@@ -7,21 +7,21 @@ import { TaskRepository } from './tasks.repository';
 export class InMemoryTaskRepository implements TaskRepository {
   private tasks: Task[] = [];
 
-  findAll(): Task[] {
+  async findAll(): Promise<Task[]> {
     return [...this.tasks];
   }
 
-  findById(id: string): Task | undefined {
+  async findById(id: string): Promise<Task | undefined> {
     return this.tasks.find((task) => task.id === id);
   }
 
-  create(task: Task): Task {
+  async create(task: Task): Promise<Task> {
     this.tasks = [...this.tasks, task];
 
     return task;
   }
 
-  update(task: Task): Task {
+  async update(task: Task): Promise<Task> {
     this.tasks = this.tasks.map((currentTask) =>
       currentTask.id === task.id ? task : currentTask,
     );
@@ -29,11 +29,11 @@ export class InMemoryTaskRepository implements TaskRepository {
     return task;
   }
 
-  delete(id: string): void {
+  async delete(id: string): Promise<void> {
     this.tasks = this.tasks.filter((task) => task.id !== id);
   }
 
-  deleteAll(): void {
+  async deleteAll(): Promise<void> {
     this.tasks = [];
   }
 }
