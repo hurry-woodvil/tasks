@@ -196,6 +196,20 @@ tasks
 
 ---
 
+## API Documentation
+
+Backend 起動後、Swagger UI で API 仕様を確認可能。
+
+```zsh
+pnpm backend:dev
+```
+
+```text
+http://localhost:3000/api
+```
+
+---
+
 ## Testing
 
 ### Frontend
