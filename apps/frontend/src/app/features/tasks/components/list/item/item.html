@@ -1,0 +1,61 @@
+<div class="task-item" [class.task-item--done]="task().status === 'done'">
+  @if (editing()) {
+    <form class="taks-item__edit" (ngSubmit)="saveEdit()">
+      <input
+        class="task-item__edit-title"
+        type="text"
+        aria-label="編集タスク名"
+        [value]="editTitle()"
+        (input)="editTitle.set($any($event.target).value)"
+      />
+
+      <input
+        class="task-item__edit-due-date"
+        type="date"
+        aria-label="編集期限"
+        [value]="editDueDate()"
+        (input)="editDueDate.set($any($event.target).value || null)"
+      />
+
+      <div class="task-item__edit-actions">
+        <button type="submit">保存</button>
+        <button type="button" (click)="cancelEdit()">キャンセル</button>
+      </div>
+    </form>
+  } @else {
+    <div class="task-item__main">
+      <input
+        type="checkbox"
+        [checked]="task().status === 'done'"
+        [attr.aria-label]="task().title + 'を完了する'"
+        (change)="toggleTask.emit(task().id)"
+      />
+
+      <div class="task-item__content">
+        <span class="task-item__title">
+          {{ task().title }}
+        </span>
+
+        <div class="task-item__meta">
+          @if (task().dueDate) {
+            <span class="task-item__due-date">期限: {{ task().dueDate }}</span>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="task-item__actions">
+      <button type="button" [attr.aria-label]="task().title + 'を編集'" (click)="startEdit()">
+        編集
+      </button>
+
+      <button
+        type="button"
+        [attr.aria-label]="task().title + 'を削除'"
+        (click)="deleteTask.emit(task().id)"
+      >
+        削除
+      </button>
+    </div>
+  }
+</div>

@@ -1,10 +1,11 @@
 # Tasks
 
-**Current Version: v0.2.0**
+**Current Version: v0.3.0**
 
-Angular Signals を使ったタスク管理アプリ。
+Angular Signals と NextJS を使ったタスク管理アプリ。
 
-このプロジェクトは、Angular の設計・状態管理・テスト・UI コンポーネント設計を学習することを目的として開発している。
+このプロジェクトは、フロントエンドだけでなくバックエンドも含めた
+モダンな Web アプリケーション開発を学習することを目的としている。
 
 ---
 
@@ -20,6 +21,20 @@ Angular における
 - Repository Pattern
 - Dependency Injection
 - Testing
+
+NestJS における
+
+- Layered Architecture
+- Repository Pattern
+- Dependency Injection
+- Validation
+- ORM (Prisma)
+
+さらに
+
+- Unit Test
+- E2E Test
+- Full Stack Development
 
 を学習・検証することを目的としている。
 
@@ -39,23 +54,38 @@ Angular における
 - Loading
 - Error Retry
 - Empty State
+- SQLite 永続化
+- REST API
 
 ---
 
 ## Tech Stack
 
+### Angular
+
 - Angular
-- TypeScript
 - Angular Signals
 - RxJS
-- JSON Server
-- Repository Pattern
-- Dependency Injection
+- TypeScript
+
+### Backend
+
+- NestJS
+- Prisma ORM
+- SQLite
+- class-validator
+
+### Testing
+
 - Vitest
+- Jest
 - Playwright
+
+### Tooling
+
+- pnpm
 - ESLint
 - Prettier
-- pnpm
 
 ---
 
@@ -64,37 +94,49 @@ Angular における
 ### Directory Structure
 
 ```text
-src/
-┗━ app/
-    ┗━ features/
-        ┗━ tasks/
-            ┣━ components/
-            ┣━ data-access/
-            ┃   ┣━ task-repository.ts
-            ┃   ┣━ task-repository.provider.ts
-            ┃   ┣━ json-server-task-repository.ts
-            ┃   ┣━ mock-task-repository.ts
-            ┃   ┗━ local-storage-task-repository.ts
-            ┣━ models/
-            ┣━ pages/
-            ┗━ stores/
+apps/
+┣━ frontend/
+┃   ┗━ src/
+┃       ┗━ app/
+┃           ┗━ features/
+┃               ┗━ tasks/
+┃                   ┣━ components/
+┃                   ┣━ data-access/
+┃                   ┃   ┣━ task-repository.ts
+┃                   ┃   ┣━ task-repository.provider.ts
+┃                   ┃   ┣━ json-server-task-repository.ts
+┃                   ┃   ┣━ mock-task-repository.ts
+┃                   ┃   ┗━ local-storage-task-repository.ts
+┃                   ┣━ models/
+┃                   ┣━ pages/
+┃                   ┗━ stores/
+┗━ backend/
+    ┗━ src/
+        ┗━ app/
+            ┣━ prisma/
+            ┗━ tasks/
 ```
 
 ### Data Flow
 
 ```text
-UI
-↓
-TaskListPage
+Angular UI
 ↓
 TaskStore (Signals)
 ↓
-TaskRepository (interface)
+TaskRepository
 ↓
-Provider
-  ┣━ JsonServerTaskRepository
-  ┣━ MockTaskRepository
-  ┗━ LocalStorageTaskRepository
+HTTP
+↓
+NestJS Controller
+↓
+TaskService
+↓
+TaskRepository
+↓
+Prisma
+↓
+SQLite
 ```
 
 ### Component Design
@@ -147,17 +189,23 @@ tasks
 - Repository Pattern によるデータアクセスの抽象化
 - Dependency Injection による Repository の切り替え
 - Barrel Export による公開 API の整理
+- Layered Architecture (NestJS)
+- Prisma ORM
+- Repository Pattern (Frontend / Backend)
+- DTO + Validation
 
 ---
 
 ## Testing
 
-### Unit Test
+### Frontend
+
+#### Unit Test
 
 - Component
 - Store
 
-### E2E
+#### E2E
 
 - CRUD
 - Search
@@ -166,6 +214,14 @@ tasks
 - Pagination
 - Undo
 - Retry
+
+### Backend
+
+#### Unit Test
+
+- Controller
+- Service
+- Repository
 
 ---
 
@@ -205,10 +261,11 @@ pnpm check
 
 ## Future Improvements
 
-- NestJS Backend
 - OpenAPI
-- Authentication
+- JWT Authentication
 - Authorization
+- Docker
+- CI (GitHub Actions)
 - Angular Material
 - Responsive UI
 - Dark Mode
