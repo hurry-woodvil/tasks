@@ -1,9 +1,11 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import {
   ApiConflictResponse,
   ApiCreatedResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { SignupDto } from './dto/signup.dto';
 import { SigninDto } from './dto/signin.dto';
@@ -28,8 +30,16 @@ export class AuthController {
   }
 
   @ApiOperation({ summary: 'サインイン' })
+  @ApiOkResponse({
+    description: 'サインインに成功しました',
+    type: AuthUserResponseDto,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'メールアドレスまたはパスワードが正しくありません',
+  })
+  @HttpCode(HttpStatus.OK)
   @Post('signin')
-  signin(@Body() dto: SigninDto) {
-    return dto;
+  signin(@Body() dto: SigninDto): Promise<AuthUserResponseDto> {
+    return this.authService.signin(dto);
   }
 }
