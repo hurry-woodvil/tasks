@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+out/
+coverage/
+
+# Angular
+.angular/
+
+# Playwright
+playwright-report/
+test-results/
+blob-report/
+playwright/.cache/
+playwright/.auth/
+
+# Prisma generated files
+**/generated/prisma/
+
+# Runtime files
+*.db
+*.db-journal
+
+# Package manager
+pnpm-lock.yaml

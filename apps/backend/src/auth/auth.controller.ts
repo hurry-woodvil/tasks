@@ -25,7 +25,7 @@ import { SigninResponseDto } from './dto/signin-response.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { CurrentUser } from './decorators/current-user.decorator';
 import type { JwtPayload } from './models/jwt-payload';
-import { ErrorResponseDto } from 'src/common/dto/error-response.dto';
+import { ErrorResponseDto } from '../common/dto/error-response.dto';
 
 @ApiTags('auth')
 @Controller('auth')

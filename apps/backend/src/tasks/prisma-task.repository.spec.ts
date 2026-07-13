@@ -1,4 +1,4 @@
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { Task } from './models/task';
 import { PrismaTaskRepository } from './prisma-task.repository';
 

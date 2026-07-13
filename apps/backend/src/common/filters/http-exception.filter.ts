@@ -20,10 +20,11 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
-    const statusCode =
-      exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR;
+    let statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+
+    if (exception instanceof HttpException) {
+      statusCode = exception.getStatus();
+    }
 
     const message = this.getMessage(exception);
 
@@ -73,7 +74,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     return exception.message;
   }
 
-  private getErrorCode(status: number): ErrorCode {
+  private getErrorCode(status: HttpStatus): ErrorCode {
     switch (status) {
       case HttpStatus.BAD_REQUEST:
         return ErrorCode.BAD_REQUEST;

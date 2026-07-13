@@ -20,7 +20,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { TaskDto } from './dto/task.dto';
-import { ErrorResponseDto } from 'src/common/dto/error-response.dto';
+import { ErrorResponseDto } from '../common/dto/error-response.dto';
 
 @ApiTags('tasks')
 @Controller('tasks')

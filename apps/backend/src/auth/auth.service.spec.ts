@@ -4,10 +4,14 @@ import { User } from '../users/models/user';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as argon2 from 'argon2';
 import { UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 
 describe('AuthService', () => {
   let authService: AuthService;
-  let usersService: jest.Mocked<UsersService>;
+  let usersService: jest.Mocked<
+    Pick<UsersService, 'createUser' | 'findByEmail' | 'findById'>
+  >;
+  let jwtService: jest.Mocked<Pick<JwtService, 'signAsync'>>;
 
   const user: User = {
     id: 'user-id',
@@ -26,6 +30,13 @@ describe('AuthService', () => {
           useValue: {
             createUser: jest.fn(),
             findByEmail: jest.fn(),
+            findById: jest.fn(),
+          },
+        },
+        {
+          provide: JwtService,
+          useValue: {
+            signAsync: jest.fn(),
           },
         },
       ],
@@ -33,25 +44,33 @@ describe('AuthService', () => {
 
     authService = module.get(AuthService);
     usersService = module.get(UsersService);
+    jwtService = module.get(JwtService);
   });
 
   describe('signin', () => {
-    it('returns user response when credentials are valid', async () => {
+    it('returns an access token when credentials are valid', async () => {
       const password = 'password123';
       const passwordHash = await argon2.hash(password);
 
       usersService.findByEmail.mockResolvedValue({
-        ...user,
+        id: 'user-id',
+        email: 'test@example.com',
         passwordHash,
+        createdAt: new Date('2026-07-13T00:00:00.000Z'),
+        updatedAt: new Date('2026-07-13T00:00:00.000Z'),
       });
 
+      jwtService.signAsync.mockResolvedValue('dummy-access-token');
+
       await expect(
-        authService.signin({ email: user.email, password }),
+        authService.signin({ email: 'test@example.com', password }),
       ).resolves.toEqual({
-        id: user.id,
-        email: user.email,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
+        accessToken: 'dummy-access-token',
+      });
+
+      expect(jwtService.signAsync).toHaveBeenCalledWith({
+        sub: 'user-id',
+        email: 'test@example.com',
       });
     });
 
