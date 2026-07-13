@@ -20,6 +20,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { TaskDto } from './dto/task.dto';
+import { ErrorResponseDto } from 'src/common/dto/error-response.dto';
 
 @ApiTags('tasks')
 @Controller('tasks')
@@ -35,7 +36,10 @@ export class TasksController {
 
   @ApiOperation({ summary: 'タスクを作成する' })
   @ApiOkResponse({ type: TaskDto })
-  @ApiBadRequestResponse({ description: '入力値が不正です' })
+  @ApiBadRequestResponse({
+    description: '入力値が不正です',
+    type: ErrorResponseDto,
+  })
   @Post()
   async create(@Body() dto: CreateTaskDto): Promise<Task> {
     return await this.taskService.create(dto);
@@ -45,9 +49,11 @@ export class TasksController {
   @ApiOkResponse({ type: TaskDto })
   @ApiBadRequestResponse({
     description: '入力値が不正です',
+    type: ErrorResponseDto,
   })
   @ApiNotFoundResponse({
     description: 'タスクが見つかりません',
+    type: ErrorResponseDto,
   })
   @Patch(':id')
   async update(
@@ -60,6 +66,7 @@ export class TasksController {
   @ApiOperation({ summary: '指定したタスクを削除する' })
   @ApiNotFoundResponse({
     description: 'タスクが見つかりません',
+    type: ErrorResponseDto,
   })
   @Delete()
   async deleteAll(): Promise<void> {
