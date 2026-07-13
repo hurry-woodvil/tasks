@@ -68,7 +68,7 @@ export class AuthController {
   })
   @UseGuards(JwtAuthGuard)
   @Get('me')
-  me(@CurrentUser() user: JwtPayload) {
-    return user;
+  me(@CurrentUser() currentUser: JwtPayload) {
+    return this.authService.getCurrentUser(currentUser.sub);
   }
 }

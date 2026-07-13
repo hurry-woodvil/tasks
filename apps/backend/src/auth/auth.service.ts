@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import * as argon2 from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 
@@ -25,7 +29,7 @@ export class AuthService {
       passwordHash,
     });
 
-    return this.toResponseDto(user);
+    return this.toAuthUserResponse(user);
   }
 
   async signin(dto: SigninDto): Promise<SigninResponseDto> {
@@ -51,7 +55,17 @@ export class AuthService {
     return { accessToken };
   }
 
-  private toResponseDto(user: User): AuthUserResponseDto {
+  async getCurrentUser(userId: string): Promise<AuthUserResponseDto> {
+    const user = await this.usersService.findById(userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return this.toAuthUserResponse(user);
+  }
+
+  private toAuthUserResponse(user: User): AuthUserResponseDto {
     return {
       id: user.id,
       email: user.email,
