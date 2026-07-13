@@ -1,5 +1,14 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
   ApiConflictResponse,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -7,11 +16,15 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import type { Request } from 'express';
 import { SignupDto } from './dto/signup.dto';
 import { SigninDto } from './dto/signin.dto';
 import { AuthService } from './auth.service';
 import { AuthUserResponseDto } from './dto/auth-user-response.dto';
 import { SigninResponseDto } from './dto/signin-response.dto';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { CurrentUser } from './decorators/current-user.decorator';
+import type { JwtPayload } from './models/jwt-payload';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -43,5 +56,19 @@ export class AuthController {
   @Post('signin')
   signin(@Body() dto: SigninDto): Promise<SigninResponseDto> {
     return this.authService.signin(dto);
+  }
+
+  @ApiOperation({ summary: 'ログインユーザー取得' })
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    description: 'ログインユーザー',
+  })
+  @ApiUnauthorizedResponse({
+    description: '認証が必要です',
+  })
+  @UseGuards(JwtAuthGuard)
+  @Get('me')
+  me(@CurrentUser() user: JwtPayload) {
+    return user;
   }
 }
