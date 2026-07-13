@@ -11,6 +11,7 @@ import { SignupDto } from './dto/signup.dto';
 import { SigninDto } from './dto/signin.dto';
 import { AuthService } from './auth.service';
 import { AuthUserResponseDto } from './dto/auth-user-response.dto';
+import { SigninResponseDto } from './dto/signin-response.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -20,6 +21,7 @@ export class AuthController {
   @ApiOperation({ summary: 'ユーザー登録' })
   @ApiCreatedResponse({
     description: 'ユーザー登録に成功しました',
+    type: AuthUserResponseDto,
   })
   @ApiConflictResponse({
     description: 'メールアドレスがすでに使用されています',
@@ -32,14 +34,14 @@ export class AuthController {
   @ApiOperation({ summary: 'サインイン' })
   @ApiOkResponse({
     description: 'サインインに成功しました',
-    type: AuthUserResponseDto,
+    type: SigninResponseDto,
   })
   @ApiUnauthorizedResponse({
     description: 'メールアドレスまたはパスワードが正しくありません',
   })
   @HttpCode(HttpStatus.OK)
   @Post('signin')
-  signin(@Body() dto: SigninDto): Promise<AuthUserResponseDto> {
+  signin(@Body() dto: SigninDto): Promise<SigninResponseDto> {
     return this.authService.signin(dto);
   }
 }

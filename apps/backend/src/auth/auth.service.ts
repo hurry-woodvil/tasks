@@ -1,15 +1,21 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as argon2 from 'argon2';
+import { JwtService } from '@nestjs/jwt';
 
 import { UsersService } from '../users/users.service';
 import { SignupDto } from './dto/signup.dto';
 import { AuthUserResponseDto } from './dto/auth-user-response.dto';
 import { SigninDto } from './dto/signin.dto';
 import { User } from '../users/models/user';
+import { SigninResponseDto } from './dto/signin-response.dto';
+import { JwtPayload } from './models/jwt-payload';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async signup(dto: SignupDto): Promise<AuthUserResponseDto> {
     const passwordHash = await argon2.hash(dto.password);
@@ -22,23 +28,27 @@ export class AuthService {
     return this.toResponseDto(user);
   }
 
-  async signin(dto: SigninDto): Promise<AuthUserResponseDto> {
+  async signin(dto: SigninDto): Promise<SigninResponseDto> {
     const user = await this.usersService.findByEmail(dto.email);
 
     if (!user) {
       throw new UnauthorizedException('Email or password is incorrect');
     }
 
-    const passwordMatches = await argon2.verify(
-      user.passwordHash,
-      dto.password,
-    );
+    const matched = await argon2.verify(user.passwordHash, dto.password);
 
-    if (!passwordMatches) {
+    if (!matched) {
       throw new UnauthorizedException('Email or password is incorrect');
     }
 
-    return this.toResponseDto(user);
+    const payload: JwtPayload = {
+      sub: user.id,
+      email: user.email,
+    };
+
+    const accessToken = await this.jwtService.signAsync(payload);
+
+    return { accessToken };
   }
 
   private toResponseDto(user: User): AuthUserResponseDto {
