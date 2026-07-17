@@ -83,6 +83,7 @@ export default defineConfig([
     languageOptions: {
       globals: {
         ...globals.node,
+        ...globals.jest,
       },
 
       parserOptions: {
@@ -94,21 +95,6 @@ export default defineConfig([
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-floating-promises": "warn",
       "@typescript-eslint/no-unsafe-argument": "warn",
-    },
-  },
-
-  /*
-   * Backend: Jest
-   */
-  {
-    name: "backend/tests",
-    files: ["apps/backend/src/**/*.spec.ts", "apps/backend/test/**/*.ts"],
-
-    languageOptions: {
-      globals: {
-        ...globals.node,
-        ...globals.jest,
-      },
     },
   },
 ]);
