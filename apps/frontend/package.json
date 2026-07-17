@@ -1,23 +1,20 @@
 {
   "name": "frontend",
-  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "ng": "ng",
     "dev": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "lint": "ng lint",
-    "lint:fix": "ng lint --fix",
-    "format": "prettier --write \"src/**/*.{ts,html,css,scss,json}\" \"*.{json,js,mjs,ts}\"",
-    "format:check": "prettier --check \"src/**/*.{ts,html,css,scss,json}\" \"*.{json,js,mjs,ts}\"",
+    "lint": "pnpm --workspace-root lint:frontend",
+    "lint:fix": "pnpm --workspace-root lint:fix:frontend",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "test": "ng test",
     "test:watch": "ng test --watch",
     "e2e": "playwright test",
     "e2e:ui": "playwright test --ui",
     "check": "pnpm lint && pnpm format:check && pnpm test && pnpm build"
   },
-  "private": true,
-  "packageManager": "pnpm@11.9.0",
   "dependencies": {
     "@angular/common": "^22.0.0",
     "@angular/compiler": "^22.0.0",
@@ -30,24 +27,16 @@
     "zone.js": "^0.16.2"
   },
   "devDependencies": {
-    "@angular-eslint/builder": "22.0.0",
     "@angular/build": "^22.0.4",
     "@angular/cli": "^22.0.4",
     "@angular/compiler-cli": "^22.0.0",
-    "@angular/language-server": "^22.0.2",
-    "@eslint/js": "^10.0.1",
+    "@angular-eslint/builder": "22.0.0",
     "@playwright/test": "^1.61.1",
-    "@tailwindcss/language-server": "^0.14.29",
     "@tailwindcss/postcss": "^4.1.12",
-    "@types/node": "^20.19.43",
-    "angular-eslint": "22.0.0",
-    "eslint": "^10.3.0",
-    "jsdom": "^28.0.0",
     "postcss": "^8.5.3",
-    "prettier": "^3.8.1",
     "tailwindcss": "^4.1.12",
-    "typescript": "~6.0.2",
-    "typescript-eslint": "8.60.1",
+    "@types/node": "^20.19.43",
+    "jsdom": "^28.0.0",
     "vitest": "^4.0.8"
   }
 }

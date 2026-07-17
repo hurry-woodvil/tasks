@@ -4,25 +4,22 @@ node_modules/
 # Build outputs
 dist/
 build/
-out/
 coverage/
 
-# Angular
+# Framework caches
 .angular/
 
-# Playwright
+# Test outputs
 playwright-report/
 test-results/
 blob-report/
-playwright/.cache/
-playwright/.auth/
 
-# Prisma generated files
+# Generated code
 **/generated/prisma/
 
-# Runtime files
+# Databases
 *.db
 *.db-journal
 
-# Package manager
+# Lockfile
 pnpm-lock.yaml

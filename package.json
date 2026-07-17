@@ -5,27 +5,32 @@
   "scripts": {
     "dev": "concurrently -n frontend,backend \"pnpm --filter frontend dev\" \"pnpm --filter backend dev\"",
     "build": "pnpm --recursive --if-present build",
-    "lint": "pnpm --recursive --if-present lint",
-    "lint:fix": "pnpm --recursive --if-present lint:fix",
+    "lint": "eslint apps",
+    "lint:fix": "eslint apps --fix",
+    "lint:frontend": "eslint apps/frontend",
+    "lint:fix:frontend": "eslint apps/frontend --fix",
+    "lint:backend": "eslint apps/backend",
+    "lint:fix:backend": "eslint apps/backend --fix",
     "format": "pnpm --recursive --if-present format",
     "format:check": "pnpm --recursive --if-present format:check",
     "test": "pnpm --recursive --if-present test",
     "check": "pnpm --recursive --if-present check",
     "e2e": "pnpm --filter frontend e2e",
     "e2e:ui": "pnpm --filter frontend e2e:ui",
-    "frontend:dev": "pnpm --filter frontend dev",
-    "backend:dev": "pnpm --filter backend dev",
     "prisma:validate": "pnpm --filter backend prisma:validate",
     "prisma:generate": "pnpm --filter backend prisma:generate",
     "prisma:migrate": "pnpm --filter backend prisma:migrate",
     "prisma:studio": "pnpm --filter backend prisma:studio"
   },
   "devDependencies": {
-    "@angular/language-server": "^22.0.2",
-    "@tailwindcss/language-server": "^0.14.29",
-    "@types/passport-jwt": "^4.0.1",
+    "@eslint/js": "^10.0.1",
+    "angular-eslint": "22.0.0",
     "concurrently": "^10.0.3",
+    "eslint": "^10.3.0",
+    "globals": "^17.0.0",
+    "jiti": "^2.7.0",
+    "prettier": "^3.8.1",
     "typescript": "^6.0.3",
-    "typescript-language-server": "^5.3.0"
+    "typescript-eslint": "8.60.1"
   }
 }
