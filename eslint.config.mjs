@@ -87,7 +87,6 @@ export default defineConfig([
 
       parserOptions: {
         projectService: true,
-        tsconfigRootDir: import.meta.dirname,
       },
     },
 
@@ -107,6 +106,7 @@ export default defineConfig([
 
     languageOptions: {
       globals: {
+        ...globals.node,
         ...globals.jest,
       },
     },
