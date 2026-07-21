@@ -67,9 +67,7 @@ describe('TaskStore', () => {
     });
 
     it('sets error when loading tasks fails', () => {
-      repositoryMock.findAll.mockReturnValue(
-        throwError(() => new Error('network error')),
-      );
+      repositoryMock.findAll.mockReturnValue(throwError(() => new Error('network error')));
 
       store.loadTasks();
 
@@ -78,7 +76,7 @@ describe('TaskStore', () => {
     });
 
     it('clears error when loading tasks starts', () => {
-      store.error.set('前回のエラー');
+      store.setErrorForForTest('前回のエラー');
 
       store.loadTasks();
 
@@ -114,7 +112,7 @@ describe('TaskStore', () => {
     });
 
     it('clears error when adding task succeeds', () => {
-      store.error.set('前回のエラー');
+      store.setErrorForForTest('前回のエラー');
 
       store.addTask('Angularを学ぶ', null);
 
@@ -124,7 +122,7 @@ describe('TaskStore', () => {
 
   describe('updating tasks', () => {
     it('toggles a task to "done"', () => {
-      store.tasks.set([createTask()]);
+      store.setTasksForTest([createTask()]);
 
       store.toggleTask('1');
 
@@ -138,7 +136,7 @@ describe('TaskStore', () => {
     });
 
     it('toggles a task to "todo"', () => {
-      store.tasks.set([createTask()]);
+      store.setTasksForTest([createTask()]);
 
       store.toggleTask('1');
 
@@ -150,7 +148,7 @@ describe('TaskStore', () => {
     });
 
     it('updates a task without dueDate', () => {
-      store.tasks.set([createTask({ dueDate: '2026-07-01' })]);
+      store.setTasksForTest([createTask({ dueDate: '2026-07-01' })]);
 
       expect(store.tasks()[0]!.title).toBe('Angularを学ぶ');
       expect(store.tasks()[0]!.dueDate).toBe('2026-07-01');
@@ -164,7 +162,7 @@ describe('TaskStore', () => {
     });
 
     it('updates a task with dueDate', () => {
-      store.tasks.set([createTask({ dueDate: '2026-07-01' })]);
+      store.setTasksForTest([createTask({ dueDate: '2026-07-01' })]);
 
       expect(store.tasks()[0]!.title).toBe('Angularを学ぶ');
       expect(store.tasks()[0]!.dueDate).toBe('2026-07-01');
@@ -180,7 +178,7 @@ describe('TaskStore', () => {
 
   describe('deleting tasks', () => {
     it('deletes a task', () => {
-      store.tasks.set([createTask()]);
+      store.setTasksForTest([createTask()]);
 
       store.deleteTask('1');
 
@@ -191,7 +189,7 @@ describe('TaskStore', () => {
 
     it('sets recently deleted task when task is deleted', () => {
       const task = createTask();
-      store.tasks.set([task]);
+      store.setTasksForTest([task]);
 
       store.deleteTask('1');
 
@@ -202,7 +200,7 @@ describe('TaskStore', () => {
   describe('undo delete', () => {
     it('restores recently deleted task', () => {
       const task = createTask();
-      store.tasks.set([task]);
+      store.setTasksForTest([task]);
 
       store.deleteTask(task.id);
 
@@ -216,7 +214,7 @@ describe('TaskStore', () => {
 
     it('does nothing when there is no recently deleted task', () => {
       const task = createTask();
-      store.tasks.set([task]);
+      store.setTasksForTest([task]);
 
       store.undoDeleteTask();
 
@@ -228,13 +226,11 @@ describe('TaskStore', () => {
 
     it('sets error when restoring deleted task fails', () => {
       const task = createTask();
-      store.tasks.set([task]);
+      store.setTasksForTest([task]);
 
       store.deleteTask(task.id);
 
-      repositoryMock.create.mockReturnValue(
-        throwError(() => new Error('network error')),
-      );
+      repositoryMock.create.mockReturnValue(throwError(() => new Error('network error')));
 
       store.undoDeleteTask();
 
@@ -251,7 +247,7 @@ describe('TaskStore', () => {
         title: '完了済みタスク',
         status: 'done',
       });
-      store.tasks.set([todoTask, doneTask]);
+      store.setTasksForTest([todoTask, doneTask]);
 
       store.setFilter('todo');
 
@@ -267,7 +263,7 @@ describe('TaskStore', () => {
         title: '完了済みタスク',
         status: 'done',
       });
-      store.tasks.set([todoTask, doneTask]);
+      store.setTasksForTest([todoTask, doneTask]);
 
       store.setFilter('done');
 
@@ -283,7 +279,7 @@ describe('TaskStore', () => {
         title: '完了済みタスク',
         status: 'done',
       });
-      store.tasks.set([todoTask, doneTask]);
+      store.setTasksForTest([todoTask, doneTask]);
 
       store.setFilter('todo');
 
@@ -297,7 +293,7 @@ describe('TaskStore', () => {
     it('filters tasks by search query', () => {
       const angularTask = createTask({ id: '1' });
       const reactTask = createTask({ id: '2', title: 'Reactを学ぶ' });
-      store.tasks.set([angularTask, reactTask]);
+      store.setTasksForTest([angularTask, reactTask]);
 
       store.setSearchQuery('Angular');
 
@@ -311,7 +307,7 @@ describe('TaskStore', () => {
       const task2 = createTask({ id: '1', title: 'B: Angularを学ぶ' });
       const task1 = createTask({ id: '2', title: 'A: Reactを学ぶ' });
       const task3 = createTask({ id: '3', title: 'C: Vueを学ぶ' });
-      store.tasks.set([task2, task1, task3]);
+      store.setTasksForTest([task2, task1, task3]);
 
       store.setSort('title');
 
@@ -324,7 +320,7 @@ describe('TaskStore', () => {
       const task2 = createTask({ id: '1', dueDate: '2026-06-01' });
       const task1 = createTask({ id: '2', dueDate: '2026-01-01' });
       const task3 = createTask({ id: '3', dueDate: '2026-12-01' });
-      store.tasks.set([task2, task1, task3]);
+      store.setTasksForTest([task2, task1, task3]);
 
       store.setSort('dueDate');
 
@@ -346,7 +342,7 @@ describe('TaskStore', () => {
         id: '3',
         createdAt: '2026-12-01T00:00:00.000Z',
       });
-      store.tasks.set([task2, task1, task3]);
+      store.setTasksForTest([task2, task1, task3]);
 
       store.setSort('createdAt');
 
@@ -359,21 +355,21 @@ describe('TaskStore', () => {
   describe('pagination', () => {
     it('returns paged tasks', () => {
       const tasks = createTasks(6);
-      store.tasks.set(tasks);
+      store.setTasksForTest(tasks);
 
       expect(store.pagedTasks()).toHaveLength(5);
     });
 
     it('calculates total pages', () => {
       const tasks = createTasks(6);
-      store.tasks.set(tasks);
+      store.setTasksForTest(tasks);
 
       expect(store.totalPages()).toBe(2);
     });
 
     it('goes to next page', () => {
       const tasks = createTasks(6);
-      store.tasks.set(tasks);
+      store.setTasksForTest(tasks);
 
       store.goToNextPage();
 
@@ -383,7 +379,7 @@ describe('TaskStore', () => {
 
     it('does not go beyond last page', () => {
       const tasks = createTasks(1);
-      store.tasks.set(tasks);
+      store.setTasksForTest(tasks);
 
       store.goToNextPage();
 
@@ -392,7 +388,7 @@ describe('TaskStore', () => {
 
     it('goes to previous page', () => {
       const tasks = createTasks(6);
-      store.tasks.set(tasks);
+      store.setTasksForTest(tasks);
 
       store.goToNextPage();
       store.goToPreviousPage();
@@ -403,7 +399,7 @@ describe('TaskStore', () => {
 
     it('does not go before first page', () => {
       const tasks = createTasks(1);
-      store.tasks.set(tasks);
+      store.setTasksForTest(tasks);
 
       store.goToPreviousPage();
 
@@ -412,12 +408,26 @@ describe('TaskStore', () => {
 
     it('resets current page when search query changes', () => {
       const tasks = createTasks(6);
-      store.tasks.set(tasks);
+      store.setTasksForTest(tasks);
 
       store.goToNextPage();
       expect(store.currentPage()).toBe(2);
 
       store.setSearchQuery('タスク');
+      expect(store.currentPage()).toBe(1);
+    });
+
+    it('moves to previous page when current page becomes invalid', () => {
+      const tasks = createTasks(6);
+
+      store.setTasksForTest(tasks);
+
+      store.goToNextPage();
+
+      expect(store.currentPage()).toBe(2);
+
+      store.deleteTask(tasks[5]!.id);
+
       expect(store.currentPage()).toBe(1);
     });
   });

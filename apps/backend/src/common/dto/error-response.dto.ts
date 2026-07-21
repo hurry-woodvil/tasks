@@ -4,25 +4,25 @@ export class ErrorResponseDto {
   @ApiProperty({
     example: 404,
   })
-  statusCode: number;
+  statusCode!: number;
 
   @ApiProperty({
     example: 'NOT_FOUND',
   })
-  code: string;
+  code!: string;
 
   @ApiProperty({
     example: 'User not found',
   })
-  message: string;
+  message!: string;
 
   @ApiProperty({
     example: '2026-07-13T10:00:00.000Z',
   })
-  timestamp: string;
+  timestamp!: string;
 
   @ApiProperty({
     example: '/auth/me',
   })
-  path: string;
+  path!: string;
 }

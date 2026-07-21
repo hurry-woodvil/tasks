@@ -14,7 +14,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "pnpm --recursive --if-present test",
-    "check": "pnpm --recursive --if-present check",
+    "check": "pnpm format:check && pnpm lint && pnpm test && pnpm build",
     "e2e": "pnpm --filter frontend e2e",
     "e2e:ui": "pnpm --filter frontend e2e:ui",
     "prisma:validate": "pnpm --filter backend prisma:validate",

@@ -114,6 +114,10 @@ describe('TaskService', () => {
   });
 
   it('deletes a task', async () => {
+    const task = createTask();
+
+    repositoy.findById.mockResolvedValue(task);
+
     await service.delete('1');
 
     expect(repositoy.delete).toHaveBeenCalledWith('1');
