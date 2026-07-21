@@ -34,9 +34,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
         exception instanceof Error ? exception.stack : undefined,
       );
     } else {
-      this.logger.warn(
-        `${request.method} ${request.originalUrl} ${statusCode} ${message}`,
-      );
+      this.logger.warn(`${request.method} ${request.originalUrl} ${statusCode} ${message}`);
     }
 
     response.status(statusCode).json({
@@ -59,16 +57,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
       return response;
     }
 
-    if (
-      typeof response === 'object' &&
-      response !== null &&
-      'message' in response
-    ) {
+    if (typeof response === 'object' && response !== null && 'message' in response) {
       const message = response.message;
 
-      return Array.isArray(message)
-        ? message.map(String).join(',')
-        : String(message);
+      return Array.isArray(message) ? message.map(String).join(',') : String(message);
     }
 
     return exception.message;

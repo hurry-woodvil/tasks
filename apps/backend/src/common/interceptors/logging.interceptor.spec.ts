@@ -32,8 +32,8 @@ describe('LoggingInterceptor', () => {
       handle: () => of({ result: 'ok' }),
     } as CallHandler;
 
-    await expect(
-      lastValueFrom(interceptor.intercept(context, next)),
-    ).resolves.toEqual({ result: 'ok' });
+    await expect(lastValueFrom(interceptor.intercept(context, next))).resolves.toEqual({
+      result: 'ok',
+    });
   });
 });

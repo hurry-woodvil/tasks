@@ -15,26 +15,24 @@
   <app-task-form (add)="taskStore.addTask($event.title, $event.dueDate)" />
 
   @if (taskStore.loading()) {
-    <app-task-loading />
+  <app-task-loading />
   } @else if (taskStore.error()) {
-    <app-task-error-banner [message]="taskStore.error()!" (retry)="taskStore.loadTasks()" />
+  <app-task-error-banner [message]="taskStore.error()!" (retry)="taskStore.loadTasks()" />
   } @else {
-    <app-task-list
-      [tasks]="taskStore.pagedTasks()"
-      (toggleTask)="taskStore.toggleTask($event)"
-      (deleteTask)="taskStore.deleteTask($event)"
-      (saveTask)="taskStore.updateTask($event.id, $event.title, $event.dueDate)"
-    />
+  <app-task-list
+    [tasks]="taskStore.pagedTasks()"
+    (toggleTask)="taskStore.toggleTask($event)"
+    (deleteTask)="taskStore.deleteTask($event)"
+    (saveTask)="taskStore.updateTask($event.id, $event.title, $event.dueDate)"
+  />
 
-    <app-task-pagination
-      [currentPage]="taskStore.currentPage()"
-      [totalPages]="taskStore.totalPages()"
-      (previousPage)="taskStore.goToPreviousPage()"
-      (nextPage)="taskStore.goToNextPage()"
-    />
-  }
-
-  @if (taskStore.recentlyDeletedTask(); as task) {
-    <app-task-undo-banner [taskTitle]="task.title" (undo)="taskStore.undoDeleteTask()" />
+  <app-task-pagination
+    [currentPage]="taskStore.currentPage()"
+    [totalPages]="taskStore.totalPages()"
+    (previousPage)="taskStore.goToPreviousPage()"
+    (nextPage)="taskStore.goToNextPage()"
+  />
+  } @if (taskStore.recentlyDeletedTask(); as task) {
+  <app-task-undo-banner [taskTitle]="task.title" (undo)="taskStore.undoDeleteTask()" />
   }
 </section>

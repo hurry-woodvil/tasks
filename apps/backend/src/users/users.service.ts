@@ -14,10 +14,7 @@ export class UsersService {
     return await this.userRepository.findByEmail(email);
   }
 
-  async createUser(params: {
-    email: string;
-    passwordHash: string;
-  }): Promise<User> {
+  async createUser(params: { email: string; passwordHash: string }): Promise<User> {
     const existingUser = await this.userRepository.findByEmail(params.email);
 
     if (existingUser) {

@@ -1,14 +1,14 @@
 <ul>
   @for (task of tasks(); track task.id) {
-    <li [attr.aria-label]="'task-' + task.id">
-      <app-task-item
-        [task]="task"
-        (toggleTask)="toggleTask.emit($event)"
-        (deleteTask)="deleteTask.emit($event)"
-        (saveTask)="saveTask.emit($event)"
-      />
-    </li>
+  <li [attr.aria-label]="'task-' + task.id">
+    <app-task-item
+      [task]="task"
+      (toggleTask)="toggleTask.emit($event)"
+      (deleteTask)="deleteTask.emit($event)"
+      (saveTask)="saveTask.emit($event)"
+    />
+  </li>
   } @empty {
-    <app-task-empty-state />
+  <app-task-empty-state />
   }
 </ul>

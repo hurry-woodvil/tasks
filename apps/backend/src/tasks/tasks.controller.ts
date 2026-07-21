@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 
 import type { Task } from './models/task';
 import { TasksService } from './tasks.service';
@@ -56,10 +48,7 @@ export class TasksController {
     type: ErrorResponseDto,
   })
   @Patch(':id')
-  async update(
-    @Param('id') id: string,
-    @Body() dto: UpdateTaskDto,
-  ): Promise<Task> {
+  async update(@Param('id') id: string, @Body() dto: UpdateTaskDto): Promise<Task> {
     return await this.taskService.update(id, dto);
   }
 

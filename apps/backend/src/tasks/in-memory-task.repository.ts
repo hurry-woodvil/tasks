@@ -22,9 +22,7 @@ export class InMemoryTaskRepository implements TaskRepository {
   }
 
   async update(task: Task): Promise<Task> {
-    this.tasks = this.tasks.map((currentTask) =>
-      currentTask.id === task.id ? task : currentTask,
-    );
+    this.tasks = this.tasks.map((currentTask) => (currentTask.id === task.id ? task : currentTask));
 
     return Promise.resolve(task);
   }

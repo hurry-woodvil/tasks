@@ -67,7 +67,9 @@ describe('TaskStore', () => {
     });
 
     it('sets error when loading tasks fails', () => {
-      repositoryMock.findAll.mockReturnValue(throwError(() => new Error('network error')));
+      repositoryMock.findAll.mockReturnValue(
+        throwError(() => new Error('network error')),
+      );
 
       store.loadTasks();
 
@@ -90,9 +92,12 @@ describe('TaskStore', () => {
 
       expect(repositoryMock.create).toHaveBeenCalled();
       expect(store.tasks()).toHaveLength(1);
-      expect(store.tasks()[0].title).toBe('Angularを学ぶ');
-      expect(store.tasks()[0].status).toBe('todo');
-      expect(store.tasks()[0].dueDate).toBeNull();
+
+      const task = store.tasks()[0]!;
+
+      expect(task.title).toBe('Angularを学ぶ');
+      expect(task.status).toBe('todo');
+      expect(task.dueDate).toBeNull();
     });
 
     it('adds a task with dueDate', () => {
@@ -100,9 +105,12 @@ describe('TaskStore', () => {
 
       expect(repositoryMock.create).toHaveBeenCalled();
       expect(store.tasks()).toHaveLength(1);
-      expect(store.tasks()[0].title).toBe('Angularを学ぶ');
-      expect(store.tasks()[0].status).toBe('todo');
-      expect(store.tasks()[0].dueDate).toBe('2026-07-01');
+
+      const task = store.tasks()[0]!;
+
+      expect(task.title).toBe('Angularを学ぶ');
+      expect(task.status).toBe('todo');
+      expect(task.dueDate).toBe('2026-07-01');
     });
 
     it('clears error when adding task succeeds', () => {
@@ -122,7 +130,11 @@ describe('TaskStore', () => {
 
       expect(repositoryMock.update).toHaveBeenCalled();
 
-      expect(store.tasks()[0].status).toBe('done');
+      expect(store.tasks()).toHaveLength(1);
+
+      const task = store.tasks()[0]!;
+
+      expect(task.status).toBe('done');
     });
 
     it('toggles a task to "todo"', () => {
@@ -130,39 +142,39 @@ describe('TaskStore', () => {
 
       store.toggleTask('1');
 
-      expect(store.tasks()[0].status).toBe('done');
+      expect(store.tasks()[0]!.status).toBe('done');
 
       store.toggleTask('1');
 
-      expect(store.tasks()[0].status).toBe('todo');
+      expect(store.tasks()[0]!.status).toBe('todo');
     });
 
     it('updates a task without dueDate', () => {
       store.tasks.set([createTask({ dueDate: '2026-07-01' })]);
 
-      expect(store.tasks()[0].title).toBe('Angularを学ぶ');
-      expect(store.tasks()[0].dueDate).toBe('2026-07-01');
+      expect(store.tasks()[0]!.title).toBe('Angularを学ぶ');
+      expect(store.tasks()[0]!.dueDate).toBe('2026-07-01');
 
       store.updateTask('1', 'Angular Signalsを学ぶ', null);
 
       expect(repositoryMock.update).toHaveBeenCalled();
 
-      expect(store.tasks()[0].title).toBe('Angular Signalsを学ぶ');
-      expect(store.tasks()[0].dueDate).toBeNull();
+      expect(store.tasks()[0]!.title).toBe('Angular Signalsを学ぶ');
+      expect(store.tasks()[0]!.dueDate).toBeNull();
     });
 
     it('updates a task with dueDate', () => {
       store.tasks.set([createTask({ dueDate: '2026-07-01' })]);
 
-      expect(store.tasks()[0].title).toBe('Angularを学ぶ');
-      expect(store.tasks()[0].dueDate).toBe('2026-07-01');
+      expect(store.tasks()[0]!.title).toBe('Angularを学ぶ');
+      expect(store.tasks()[0]!.dueDate).toBe('2026-07-01');
 
       store.updateTask('1', 'Angular Signalsを学ぶ', '2026-12-31');
 
       expect(repositoryMock.update).toHaveBeenCalled();
 
-      expect(store.tasks()[0].title).toBe('Angular Signalsを学ぶ');
-      expect(store.tasks()[0].dueDate).toBe('2026-12-31');
+      expect(store.tasks()[0]!.title).toBe('Angular Signalsを学ぶ');
+      expect(store.tasks()[0]!.dueDate).toBe('2026-12-31');
     });
   });
 
@@ -220,7 +232,9 @@ describe('TaskStore', () => {
 
       store.deleteTask(task.id);
 
-      repositoryMock.create.mockReturnValue(throwError(() => new Error('network error')));
+      repositoryMock.create.mockReturnValue(
+        throwError(() => new Error('network error')),
+      );
 
       store.undoDeleteTask();
 
@@ -232,31 +246,43 @@ describe('TaskStore', () => {
   describe('filtering and searching', () => {
     it('filters todo tasks', () => {
       const todoTask = createTask({ id: '1', title: '未完了タスク' });
-      const doneTask = createTask({ id: '2', title: '完了済みタスク', status: 'done' });
+      const doneTask = createTask({
+        id: '2',
+        title: '完了済みタスク',
+        status: 'done',
+      });
       store.tasks.set([todoTask, doneTask]);
 
       store.setFilter('todo');
 
       expect(store.filteredTasks()).toHaveLength(1);
       expect(store.filteredTasks()).toStrictEqual([todoTask]);
-      expect(store.filteredTasks()[0].status).toBe('todo');
+      expect(store.filteredTasks()[0]!.status).toBe('todo');
     });
 
     it('filters done tasks', () => {
       const todoTask = createTask({ id: '1', title: '未完了タスク' });
-      const doneTask = createTask({ id: '2', title: '完了済みタスク', status: 'done' });
+      const doneTask = createTask({
+        id: '2',
+        title: '完了済みタスク',
+        status: 'done',
+      });
       store.tasks.set([todoTask, doneTask]);
 
       store.setFilter('done');
 
       expect(store.filteredTasks()).toHaveLength(1);
       expect(store.filteredTasks()).toStrictEqual([doneTask]);
-      expect(store.filteredTasks()[0].status).toBe('done');
+      expect(store.filteredTasks()[0]!.status).toBe('done');
     });
 
     it('shows all tasks when filter is all', () => {
       const todoTask = createTask({ id: '1', title: '未完了タスク' });
-      const doneTask = createTask({ id: '2', title: '完了済みタスク', status: 'done' });
+      const doneTask = createTask({
+        id: '2',
+        title: '完了済みタスク',
+        status: 'done',
+      });
       store.tasks.set([todoTask, doneTask]);
 
       store.setFilter('todo');
@@ -276,7 +302,7 @@ describe('TaskStore', () => {
       store.setSearchQuery('Angular');
 
       expect(store.filteredTasks()).toHaveLength(1);
-      expect(store.filteredTasks()[0].title).toBe('Angularを学ぶ');
+      expect(store.filteredTasks()[0]!.title).toBe('Angularを学ぶ');
     });
   });
 
@@ -289,9 +315,9 @@ describe('TaskStore', () => {
 
       store.setSort('title');
 
-      expect(store.filteredTasks()[0].title).toBe(task1.title);
-      expect(store.filteredTasks()[1].title).toBe(task2.title);
-      expect(store.filteredTasks()[2].title).toBe(task3.title);
+      expect(store.filteredTasks()[0]!.title).toBe(task1.title);
+      expect(store.filteredTasks()[1]!.title).toBe(task2.title);
+      expect(store.filteredTasks()[2]!.title).toBe(task3.title);
     });
 
     it('sorts tasks by dueDate', () => {
@@ -302,22 +328,31 @@ describe('TaskStore', () => {
 
       store.setSort('dueDate');
 
-      expect(store.filteredTasks()[0].dueDate).toBe(task1.dueDate);
-      expect(store.filteredTasks()[1].dueDate).toBe(task2.dueDate);
-      expect(store.filteredTasks()[2].dueDate).toBe(task3.dueDate);
+      expect(store.filteredTasks()[0]!.dueDate).toBe(task1.dueDate);
+      expect(store.filteredTasks()[1]!.dueDate).toBe(task2.dueDate);
+      expect(store.filteredTasks()[2]!.dueDate).toBe(task3.dueDate);
     });
 
     it('sorts tasks by createdAt', () => {
-      const task2 = createTask({ id: '1', createdAt: '2026-06-01T00:00:00.000Z' });
-      const task1 = createTask({ id: '2', createdAt: '2026-01-01T00:00:00.000Z' });
-      const task3 = createTask({ id: '3', createdAt: '2026-12-01T00:00:00.000Z' });
+      const task2 = createTask({
+        id: '1',
+        createdAt: '2026-06-01T00:00:00.000Z',
+      });
+      const task1 = createTask({
+        id: '2',
+        createdAt: '2026-01-01T00:00:00.000Z',
+      });
+      const task3 = createTask({
+        id: '3',
+        createdAt: '2026-12-01T00:00:00.000Z',
+      });
       store.tasks.set([task2, task1, task3]);
 
       store.setSort('createdAt');
 
-      expect(store.filteredTasks()[0].createdAt).toBe(task3.createdAt);
-      expect(store.filteredTasks()[1].createdAt).toBe(task2.createdAt);
-      expect(store.filteredTasks()[2].createdAt).toBe(task1.createdAt);
+      expect(store.filteredTasks()[0]!.createdAt).toBe(task3.createdAt);
+      expect(store.filteredTasks()[1]!.createdAt).toBe(task2.createdAt);
+      expect(store.filteredTasks()[2]!.createdAt).toBe(task1.createdAt);
     });
   });
 

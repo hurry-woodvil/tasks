@@ -8,9 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 
 describe('AuthService', () => {
   let authService: AuthService;
-  let usersService: jest.Mocked<
-    Pick<UsersService, 'createUser' | 'findByEmail' | 'findById'>
-  >;
+  let usersService: jest.Mocked<Pick<UsersService, 'createUser' | 'findByEmail' | 'findById'>>;
   let jwtService: jest.Mocked<Pick<JwtService, 'signAsync'>>;
 
   const user: User = {
@@ -62,9 +60,7 @@ describe('AuthService', () => {
 
       jwtService.signAsync.mockResolvedValue('dummy-access-token');
 
-      await expect(
-        authService.signin({ email: 'test@example.com', password }),
-      ).resolves.toEqual({
+      await expect(authService.signin({ email: 'test@example.com', password })).resolves.toEqual({
         accessToken: 'dummy-access-token',
       });
 
