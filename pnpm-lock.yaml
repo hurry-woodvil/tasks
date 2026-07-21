@@ -193,6 +193,12 @@ importers:
       '@angular/compiler-cli':
         specifier: ^22.0.0
         version: 22.0.2(@angular/compiler@22.0.2)(typescript@6.0.3)
+      '@angular/language-server':
+        specifier: ^22.0.7
+        version: 22.0.7
+      '@angular/language-service':
+        specifier: ^22.0.7
+        version: 22.0.7
       '@playwright/test':
         specifier: ^1.61.1
         version: 1.61.1
@@ -474,6 +480,15 @@ packages:
       '@angular/core': 22.0.2
       '@angular/platform-browser': 22.0.2
       rxjs: ^6.5.3 || ^7.4.0
+
+  '@angular/language-server@22.0.7':
+    resolution: {integrity: sha512-bjW+Rzh/cY3q8I0Ss5M07GMmDLiNxREPLnnqe4W2u9TPvBEHZjJLU7tWMgdmBfxndZFEfF5ij4vCpSdSJ9mlbw==}
+    engines: {node: ^22.22.3 || ^24.15.0 || >=26.0.0}
+    hasBin: true
+
+  '@angular/language-service@22.0.7':
+    resolution: {integrity: sha512-IT2CSgrb26S2SlVhWfCe0VHjv3Tdh5BG0W7LmFn1SWeQZQmUpKwyy+3pvCh3OKIUeNfqd4YNznIv8Vslnpof1A==}
+    engines: {node: ^22.22.3 || ^24.15.0 || >=26.0.0}
 
   '@angular/platform-browser@22.0.2':
     resolution: {integrity: sha512-xUkpJo/Jwa7rgpoSnZs5TeuOD3SDQL+CPJrMGjHivsqWMcAqzSNnIOcbNDJRSxAYkZ9zlJ1+h39JWSUk99rRBw==}
@@ -6660,6 +6675,13 @@ snapshots:
       rxjs: 7.8.2
       tslib: 2.8.1
       zod: 4.4.3
+
+  '@angular/language-server@22.0.7':
+    dependencies:
+      '@angular/language-service': 22.0.7
+      typescript: 6.0.3
+
+  '@angular/language-service@22.0.7': {}
 
   '@angular/platform-browser@22.0.2(@angular/common@22.0.2(@angular/core@22.0.2(@angular/compiler@22.0.2)(rxjs@7.8.2)(zone.js@0.16.2))(rxjs@7.8.2))(@angular/core@22.0.2(@angular/compiler@22.0.2)(rxjs@7.8.2)(zone.js@0.16.2))':
     dependencies:
